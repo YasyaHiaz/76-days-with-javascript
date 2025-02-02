@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Player</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ===== Global Reset & Variabel ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        :root {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: rgba(32, 32, 32, 0.95);
+            --nav-bg: #333;
+            --nav-hover: #444;
+            --text-primary: #ffffff;
+            --text-secondary: #999;
+            --accent-color: #1db954;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --border-radius: 1rem;
+            --transition-speed: 0.3s;
+        }
+
+        /* ===== Body & Container ===== */
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: var(--spacing-lg);
+            padding-bottom: 120px;
+            /* Ruang untuk music player fixed */
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* ===== Navigation ===== */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-button {
+            background-color: var(--nav-bg);
+            color: var(--text-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-button:hover {
+            background-color: var(--nav-hover);
+            transform: translateY(-1px);
+        }
+
+        .nav-button.active {
+            background-color: var(--accent-color);
+        }
+
+        /* ===== Search ===== */
+        .search-container {
+            position: relative;
+            margin-bottom: var(--spacing-lg);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* ===== Albums Grid ===== */
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md) 0;
+        }
+
+        .album-cover {
+            aspect-ratio: 1;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all var(--transition-speed);
+        }
+
+        .album-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all var(--transition-speed);
+        }
+
+        .album-cover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .album-cover:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ===== Queue Section ===== */
+        .queue-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm);
+            border-radius: 0.5rem;
+            transition: background-color var(--transition-speed);
+        }
+
+        .queue-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .song-thumbnail {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            object-fit: cover;
+        }
+
+        .song-details h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .song-details p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .playlist-card {
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+            min-height: 150px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .playlist-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .playlist-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .playlist-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+        }
+
+        /* ===== Responsive Design untuk Grid Album ===== */
+        @media (max-width: 1200px) {
+            .albums-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .albums-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .albums-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .albums-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* ===== Music Player (Glass Style) ===== */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .music-player .top-section {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        /* Album Art pada player */
+        .music-player .album-art {
+            flex-shrink: 0;
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .music-player .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .music-player .song-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .music-player .song-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-player .artist {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 0.2rem;
+        }
+
+        .music-player .controls {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .music-player .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-size: 1.2rem;
+        }
+
+        .music-player .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-player .play-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+        }
+
+        /* Progress Bar Music Player */
+        .music-player .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .music-player .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #fff, #76CCB1);
+            transition: width 0.1s linear;
+        }
+
+        /* Optional: Animasi rotasi pada album art saat lagu diputar */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Konten Utama -->
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button class="nav-button active"><i class="fas fa-headphones-alt" style="margin-right: 0.5rem;"></i>Listen
+                Now</button>
+            <button class="nav-button"><i class="fas fa-compact-disc" style="margin-right: 0.5rem;"></i>Browse</button>
+            <button class="nav-button"><i class="fas fa-broadcast-tower"
+                    style="margin-right: 0.5rem;"></i>Radio</button>
+            <button class="nav-button"><i class="fas fa-list" style="margin-right: 0.5rem;"></i>Playlists</button>
+        </nav>
+
+        <!-- Search -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search by title, artist or album...">
+        </div>
+
+        <!-- Albums Grid -->
+        <div class="albums-grid">
+            <div class="album-cover">
+                <img src="./images/album-1.png" alt="Album 1">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-2.png" alt="Album 2">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-3.png" alt="Album 3">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-4.png" alt="Album 4">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-5.png" alt="Album 5">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-6.png" alt="Album 6">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-7.png" alt="Album 7">
+            </div>
+            <div class="album-cover">
+                <img src="./images/album-8.png" alt="Album 8">
+            </div>
+        </div>
+
+        <!-- Queue Section -->
+        <div class="queue-section">
+            <h2 class="section-title">Next up</h2>
+            <div class="queue-list">
+                <div class="queue-item">
+                    <div class="song-info">
+                        <img src="86.jpg" alt="Song Thumbnail" class="song-thumbnail">
+                        <div class="song-details">
+                            <h3>Voices of the Chord</h3>
+                            <p>Sawano Hiroyuki</p>
+                        </div>
+                    </div>
+                    <div class="song-controls">
+                        <span>3:20</span>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;"><i
+                                class="far fa-heart"></i></button>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;">...</button>
+                    </div>
+                </div>
+                <!-- Tambahan Queue Item -->
+                <div class="queue-item">
+                    <div class="song-info">
+                        <img src="Shagiri.jpg" alt="Song Thumbnail" class="song-thumbnail">
+                        <div class="song-details">
+                            <h3>紙一重 - Kamihitoe</h3>
+                            <p>Uru</p>
+                        </div>
+                    </div>
+                    <div class="song-controls">
+                        <span>4:23</span>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;"><i
+                                class="far fa-heart"></i></button>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;">...</button>
+                    </div>
+                </div>
+                <div class="queue-item">
+                    <div class="song-info">
+                        <img src="Snowfall.png" alt="Song Thumbnail" class="song-thumbnail">
+                        <div class="song-details">
+                            <h3>Snowfall</h3>
+                            <p>Oneheart - reidenshi</p>
+                        </div>
+                    </div>
+                    <div class="song-controls">
+                        <span>4:36</span>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;"><i
+                                class="far fa-heart"></i></button>
+                        <button class="icon-button"
+                            style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; margin-left: 0.5rem;">...</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bagian Music Player (Glass Style) -->
+    <div class="music-player">
+        <div class="top-section">
+            <!-- Album Art -->
+            <div class="album-art">
+                <img src="Shagiri.jpg" alt="Album Art">
+            </div>
+            <!-- Informasi Lagu -->
+            <div class="song-info">
+                <div class="song-title">紙一重 - Kamihitoe</div>
+                <div class="artist">Uru</div>
+            </div>
+            <!-- Kontrol Tombol -->
+            <div class="controls">
+                <button class="control-btn" id="prev-btn">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn play-btn" id="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn" id="next-btn">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- ===== Script.js Music Player ===== -->
+    <script>
+        // Nama file lagu tanpa ekstensi
+        const songName = "UruKamihitoe";
+        const audio = new Audio(`songs/${songName}.mp3`);
+
+        const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.querySelector('.music-player .progress-bar');
+        const albumArt = document.querySelector('.music-player .album-art img');
+        let isPlaying = false;
+
+        // Validasi format file
+        if (!audio.src.endsWith('.mp3')) {
+            console.error("File bukan format .mp3 atau berada di luar folder 'songs/'");
+        } else {
+            playBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    albumArt.classList.remove('rotate');
+                } else {
+                    audio.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    albumArt.classList.add('rotate');
+                }
+                isPlaying = !isPlaying;
+            });
+
+            prevBtn.addEventListener('click', () => {
+                console.log('Tombol Previous diklik!');
+            });
+
+            nextBtn.addEventListener('click', () => {
+                console.log('Tombol Next diklik!');
+            });
+
+            // Update progress bar seiring waktu
+            audio.addEventListener('timeupdate', () => {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+            });
+
+            document.querySelector('.music-player .progress-container').addEventListener('click', (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = pos * audio.duration;
+            });
+        }
+    </script>
+</body>
+
+</html>
