@@ -1,0 +1,250 @@
+:root {
+    --primary-blue: #4361ee;
+    --accent-green: #2ecc71;
+    --bg-color: #f8f9fd;
+    --card-bg: #ffffff;
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --border-color: #e9ecef;
+    --shadow: rgba(149, 157, 165, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    display: flex;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    width: 100%;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.header h2 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task-count {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: normal;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+    background-color: var(--bg-color);
+}
+
+.task-input-container {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+#taskInput {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+#taskInput:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+.add-button {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.add-button:hover {
+    opacity: 0.9;
+}
+
+.task-list {
+    list-style: none;
+    max-height: 460px;
+    overflow-y: auto;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.task-item:hover {
+    background-color: var(--bg-color);
+}
+
+.task-checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    margin-right: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.2s;
+}
+
+.task-checkbox.completed {
+    background-color: var(--accent-green);
+    border-color: var(--accent-green);
+}
+
+.task-text {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.task-text.completed {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.task-time {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Timer Styles */
+.timer-card {
+    text-align: center;
+}
+
+.progress-info {
+    margin-bottom: 2rem;
+}
+
+.progress-info h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.progress-stats {
+    color: var(--primary-blue);
+    font-size: 0.95rem;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 2rem 0;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.timer-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.timer-button:hover {
+    transform: scale(1.05);
+}
+
+.timer-button.primary {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.timer-button.secondary {
+    background-color: var(--bg-color);
+    color: var(--text-secondary);
+}
+
+.break-info {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 968px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}

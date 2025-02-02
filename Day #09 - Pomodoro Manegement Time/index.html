@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern Pomodoro Timer || YasyaHiaz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h2>Tasks List <span class="task-count">(0 Tasks)</span></h2>
+                <div class="header-actions">
+                    <button class="icon-button"><i class="fas fa-search"></i></button>
+                    <button class="icon-button"><i class="fas fa-ellipsis-vertical"></i></button>
+                </div>
+            </div>
+
+            <div class="task-input-container">
+                <input type="text" id="taskInput" placeholder="Add new task...">
+                <button class="add-button" onclick="addTask()">
+                    <i class="fas fa-plus"></i>
+                    Add Task
+                </button>
+            </div>
+
+            <ul class="task-list" id="taskList"></ul>
+        </div>
+
+        <div class="card timer-card">
+            <div class="progress-info">
+                <h3>Daily Progress</h3>
+                <div class="progress-stats">
+                    <span id="completedTasks">0</span>/<span id="totalTasks">0</span> Tasks completed
+                </div>
+            </div>
+
+            <div class="timer-display" id="time">25:00</div>
+
+            <div class="timer-controls">
+                <button class="timer-button primary" id="startBtn" onclick="toggleTimer()">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="timer-button secondary" onclick="resetTimer()">
+                    <i class="fas fa-rotate-right"></i>
+                </button>
+            </div>
+
+            <div class="break-info">
+                <i class="fas fa-mug-hot"></i>
+                <span>Break time in <span id="breakTime">25:00</span></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
