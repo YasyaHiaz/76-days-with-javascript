@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day #13 Academic Charts || YasyaHiaz</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Dashboard Akademik</h2>
+            <button class="btn" onclick="showChart('bar')">Bar Chart</button>
+            <button class="btn btn-outline" onclick="showChart('line')">Line Chart</button>
+            <button class="btn btn-outline" onclick="showChart('pie')">Pie Chart</button>
+            <button class="btn btn-outline" onclick="showChart('scatter')">Scatter Plot</button>
+            <button class="btn btn-outline" onclick="exportData()">Export Data</button>
+        </nav>
+
+        <main class="main-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Mahasiswa</h3>
+                    <p id="totalStudents">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Rata-rata Nilai</h3>
+                    <p id="averageScore">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Nilai Tertinggi</h3>
+                    <p id="highestScore">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Nilai Terendah</h3>
+                    <p id="lowestScore">0</p>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h2>Input Data Mahasiswa</h2>
+                <div id="alertBox" class="alert"></div>
+                <div class="input-group">
+                    <input type="text" id="studentName" class="input-field" placeholder="Nama Mahasiswa">
+                    <input type="number" id="studentScore" class="input-field" placeholder="Nilai UAS" min="0"
+                        max="100">
+                    <button class="btn" onclick="addStudent()">Tambah Data</button>
+                </div>
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Nilai</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="chart-card">
+                <h2 class="chart-title" id="chartTitle">Visualisasi Data Mahasiswa</h2>
+                <canvas id="myChart"></canvas>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
