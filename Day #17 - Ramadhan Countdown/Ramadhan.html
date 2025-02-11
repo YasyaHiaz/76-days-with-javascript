@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day #17 - Ramadhan Countdown || YasyaHiaz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global & Background */
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url(./Ramadhan.png);
+            overflow: hidden;
+            background-position: center;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Commet (Animasi Bintang) */
+        .night {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: rotateZ(40deg);
+        }
+
+        .star {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: 2px;
+            background: linear-gradient(-45deg, #FFF, rgba(0, 0, 255, 0));
+            border-radius: 999px;
+            filter: drop-shadow(0 0 6px #FFF);
+            animation: tail 3s ease-in-out infinite, falling 3s ease-in-out infinite;
+        }
+
+        @keyframes tail {
+            0% {
+                width: 0;
+            }
+
+            30% {
+                width: 100px;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(300px);
+            }
+        }
+
+        .star::before,
+        .star::after {
+            content: "";
+            position: absolute;
+            top: calc(50% - 1px);
+            right: 0;
+            height: 2px;
+            background: linear-gradient(-45deg, rgba(0, 0, 255, 0), #FFF, rgba(0, 0, 255, 0));
+            border-radius: 100%;
+            transform: translateX(50%) rotateZ(45deg);
+            animation: shining 3s ease-in-out infinite;
+        }
+
+        @keyframes shining {
+            0% {
+                width: 0;
+            }
+
+            50% {
+                width: 30px;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        .star::after {
+            transform: translateX(50%) rotateZ(-45deg);
+        }
+
+        .star:nth-child(1) {
+            top: calc(50% - 100px);
+            left: calc(50% - 250px);
+            animation-delay: 1s;
+        }
+
+        .star:nth-child(1)::before,
+        .star:nth-child(1)::after {
+            animation-delay: 1s;
+        }
+
+        .star:nth-child(2) {
+            top: calc(50% - 50px);
+            left: calc(50% - 200px);
+            animation-delay: 1.2s;
+        }
+
+        .star:nth-child(2)::before,
+        .star:nth-child(2)::after {
+            animation-delay: 1.2s;
+        }
+
+        .star:nth-child(3) {
+            top: calc(50% - 0px);
+            left: calc(50% - 150px);
+            animation-delay: 1.4s;
+        }
+
+        .star:nth-child(3)::before,
+        .star:nth-child(3)::after {
+            animation-delay: 1.4s;
+        }
+
+        .star:nth-child(4) {
+            top: calc(50% - (-50px));
+            left: calc(50% - 200px);
+            animation-delay: 1.6s;
+        }
+
+        .star:nth-child(4)::before,
+        .star:nth-child(4)::after {
+            animation-delay: 1.6s;
+        }
+
+        .star:nth-child(5) {
+            top: calc(50% - (-100px));
+            left: calc(50% - 250px);
+            animation-delay: 1.8s;
+        }
+
+        .star:nth-child(5)::before,
+        .star:nth-child(5)::after {
+            animation-delay: 1.8s;
+        }
+
+        /* Countdown Card */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 80px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.15);
+        }
+
+        .time-box p {
+            margin: 0;
+        }
+
+        .time-box .number {
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
+        }
+
+        .time-box .label,
+        .footer-text {
+            font-size: 14px;
+        }
+
+        .ml-2 {
+            margin-left: 8px;
+        }
+
+        /* Glassmorphism Navbar */
+        .navbar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li a {
+            position: relative;
+            padding: 5px 0;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            color: #fbc7d4;
+        }
+
+        .navbar ul li a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #9796f0, #fbc7d4);
+            left: 0;
+            bottom: -4px;
+            transition: width 0.3s;
+        }
+
+        .navbar ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Search Bar Styles */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        .search-container input[type="text"]::placeholder {
+            color: #ddd;
+        }
+
+        .search-container input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-container button {
+            margin-left: 10px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(to right, #9796f0, #fbc7d4);
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-container button:hover {
+            background: #9796f0;
+        }
+
+        /* Styling untuk To Do List */
+        .card ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .card ul li {
+            margin: 8px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card ul li input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+    </style>
+    <!-- ================== Calendar Styling ================== -->
+    <style>
+        .calendar-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-nav button {
+            background: linear-gradient(to right, #9796f0, #fbc7d4);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 0 10px;
+        }
+
+        .calendar-nav button:hover {
+            background: #9796f0;
+        }
+
+        .calendar-nav span {
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .calendar-table caption {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .calendar-table th,
+        .calendar-table td {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar with Glassmorphism Effect -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Events</a></li>
+            <li><a href="#">Schedule</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." />
+            <button type="submit">Search</button>
+        </div>
+    </nav>
+
+    <!-- Commet (Animasi Bintang) -->
+    <div class="night">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <!-- Countdown Card (Halaman Home) -->
+    <div class="container">
+        <div class="card">
+            <h1>Ramadhan Countdown</h1>
+            <div class="countdown-container">
+                <div class="time-box">
+                    <p id="days" class="number">18</p>
+                    <p class="label">Days</p>
+                </div>
+                <div class="time-box">
+                    <p id="hours" class="number">15</p>
+                    <p class="label">Hours</p>
+                </div>
+                <div class="time-box">
+                    <p id="minutes" class="number">10</p>
+                    <p class="label">Minutes</p>
+                </div>
+                <div class="time-box">
+                    <p id="seconds" class="number">50</p>
+                    <p class="label">Seconds</p>
+                </div>
+            </div>
+            <p class="footer-text">
+                Ramadan akan tiba, insyaAllah 28 Februari 2025
+                <span class="ml-2">🌙✨</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        var countDownDate = new Date("Feb 28, 2025 00:00:00").getTime();
+        var x = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = days;
+            document.getElementById("hours").innerHTML = hours;
+            document.getElementById("minutes").innerHTML = minutes;
+            document.getElementById("seconds").innerHTML = seconds;
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("days").innerHTML = "0";
+                document.getElementById("hours").innerHTML = "0";
+                document.getElementById("minutes").innerHTML = "0";
+                document.getElementById("seconds").innerHTML = "0";
+            }
+        }, 1000);
+    </script>
+
+    <!-- Script tambahan untuk membungkus konten Home ke dalam div#homePage -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var originalContainer = document.querySelector('.container');
+            var homePageWrapper = document.createElement('div');
+            homePageWrapper.id = 'homePage';
+            originalContainer.parentNode.insertBefore(homePageWrapper, originalContainer);
+            homePageWrapper.appendChild(originalContainer);
+        });
+    </script>
+
+    <div id="eventsPage" style="display: none;">
+        <div class="container">
+            <div class="card">
+                <h1>Events</h1>
+                <p>Selamat datang di halaman Events.<br>
+                    Di sini kamu bisa menemukan berbagai informasi terkait event-event seputar Ramadhan.</p>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 20px;">
+            <div class="card">
+                <h2>To Do List: Event Keagamaan</h2>
+                <ul id="keagamaanList">
+                    <li><input type="checkbox" class="todo-checkbox"> Tadarus Al-Qur'an</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Itikaf di masjid atau mushola</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Pesantren kilat</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Pengajian Ramadan</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Sesi tausiyah dan ceramah</li>
+                </ul>
+                <h2>To Do List: Event Sosial</h2>
+                <ul id="sosialList">
+                    <li><input type="checkbox" class="todo-checkbox"> Bersedekah</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Membagikan makanan sahur</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Memberikan santunan pada kaum dhuafa</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Bakti sosial ke panti sosial</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Mengajar Al-Qur'an</li>
+                    <li><input type="checkbox" class="todo-checkbox"> Mengunjungi panti asuhan dan panti jompo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="schedulePage" style="display: none;">
+        <div class="container">
+            <div class="card">
+                <h1>Schedule</h1>
+                <p>Selamat datang di halaman Schedule.<br>
+                    Di sini kamu bisa melihat jadwal kegiatan selama Ramadhan.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactPage" style="display: none;">
+        <div class="container">
+            <div class="card">
+                <h1>Contact</h1>
+                <p>Selamat datang di halaman Contact.<br>
+                    Hubungi kami di email: yasyahryn92@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.navbar ul li a');
+
+            function showPage(pageId) {
+                document.getElementById('homePage').style.display = 'none';
+                document.getElementById('eventsPage').style.display = 'none';
+                document.getElementById('schedulePage').style.display = 'none';
+                document.getElementById('contactPage').style.display = 'none';
+
+                document.getElementById(pageId).style.display = 'block';
+            }
+
+            showPage('homePage');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const text = link.textContent.trim();
+                    if (text === 'Home') {
+                        showPage('homePage');
+                    } else if (text === 'Events') {
+                        showPage('eventsPage');
+                    } else if (text === 'Schedule') {
+                        showPage('schedulePage');
+                    } else if (text === 'Contact') {
+                        showPage('contactPage');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.todo-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        this.parentElement.style.textDecoration = 'line-through';
+                    } else {
+                        this.parentElement.style.textDecoration = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var scheduleCard = document.querySelector('#schedulePage .container .card');
+            if (scheduleCard) {
+                var calendarDiv = document.createElement('div');
+                calendarDiv.id = 'calendar';
+
+                var calendarContainer = document.createElement('div');
+                calendarContainer.className = 'calendar-container';
+
+                var calendarHeader = document.createElement('h2');
+                calendarHeader.textContent = 'Calendar';
+                calendarHeader.style.marginBottom = '10px';
+                calendarContainer.appendChild(calendarHeader);
+
+                var navDiv = document.createElement('div');
+                navDiv.className = 'calendar-nav';
+
+                var prevBtn = document.createElement('button');
+                prevBtn.textContent = '<';
+
+                var nextBtn = document.createElement('button');
+                nextBtn.textContent = '>';
+
+                var monthDisplay = document.createElement('span');
+
+                navDiv.appendChild(prevBtn);
+                navDiv.appendChild(monthDisplay);
+                navDiv.appendChild(nextBtn);
+                calendarContainer.appendChild(navDiv);
+
+                calendarDiv.appendChild(calendarContainer);
+
+                scheduleCard.appendChild(calendarDiv);
+
+                var currentMonth = 0;
+                var currentYear = 2025;
+
+                function updateCalendar() {
+                    var existingTable = calendarContainer.querySelector('.calendar-table');
+                    if (existingTable) {
+                        calendarContainer.removeChild(existingTable);
+                    }
+
+                    var monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                    ];
+                    monthDisplay.textContent = monthNames[currentMonth] + ' ' + currentYear;
+
+                    var table = generateCalendarTable(currentMonth, currentYear);
+                    calendarContainer.appendChild(table);
+
+                    prevBtn.disabled = (currentMonth === 0);
+                    nextBtn.disabled = (currentMonth === 11);
+                }
+
+                prevBtn.addEventListener('click', function () {
+                    if (currentMonth > 0) {
+                        currentMonth--;
+                        updateCalendar();
+                    }
+                });
+
+                nextBtn.addEventListener('click', function () {
+                    if (currentMonth < 11) {
+                        currentMonth++;
+                        updateCalendar();
+                    }
+                });
+
+                updateCalendar();
+            }
+        });
+
+        function generateCalendarTable(month, year) {
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            var table = document.createElement('table');
+            table.className = 'calendar-table';
+
+            var caption = table.createCaption();
+            caption.textContent = monthNames[month] + ' ' + year;
+
+            var thead = document.createElement('thead');
+            var headerRow = document.createElement('tr');
+            var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            daysOfWeek.forEach(function (day) {
+                var th = document.createElement('th');
+                th.textContent = day;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+
+            var firstDay = new Date(year, month, 1).getDay(); // (0-6)
+            var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            var tbody = document.createElement('tbody');
+            var row = document.createElement('tr');
+
+            for (var i = 0; i < firstDay; i++) {
+                var cell = document.createElement('td');
+                row.appendChild(cell);
+            }
+
+            for (var day = 1; day <= daysInMonth; day++) {
+                if ((firstDay + day - 1) % 7 === 0 && day != 1) {
+                    tbody.appendChild(row);
+                    row = document.createElement('tr');
+                }
+                var cell = document.createElement('td');
+                cell.textContent = day;
+                row.appendChild(cell);
+            }
+            tbody.appendChild(row);
+            table.appendChild(tbody);
+            return table;
+        }
+    </script>
+</body>
+
+</html>
