@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Mono', monospace;
+}
+
+body {
+    background-color: #121212;
+    color: #d1d0c5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ========== Header (Top Bar) ========== */
+header {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.top-bar-left h1 {
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-transform: lowercase;
+    color: #d1d0c5;
+}
+
+.top-bar-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.menu-item {
+    color: #7f7f7f;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-transform: lowercase;
+}
+
+.menu-item:hover {
+    color: #d1d0c5;
+}
+
+select {
+    background-color: #1f1f1f;
+    color: #d1d0c5;
+    border: 1px solid #3a3a3a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+}
+
+/* ========== Main Content ========== */
+.main-content {
+    width: 100%;
+    max-width: 1000px;
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.words-container {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    text-align: center;
+    user-select: none;
+    margin-bottom: 20px;
+}
+
+.letter {
+    transition: color 0.1s;
+}
+
+.letter.untyped {
+    color: #555;
+}
+
+.letter.correct {
+    color: #d1d0c5;
+}
+
+.letter.incorrect {
+    color: #c53b3b;
+}
+
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.4rem;
+    background-color: #d1d0c5;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: -1px;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+#hiddenInput {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+#restartBtn {
+    margin-top: 10px;
+    background: none;
+    border: 1px solid #d1d0c5;
+    color: #d1d0c5;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+}
+
+#restartBtn:hover {
+    background-color: #2e2e2e;
+}
+
+/* ========== Footer ========== */
+footer {
+    width: 100%;
+    max-width: 1000px;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: #7f7f7f;
+}
+
+footer span:hover {
+    color: #d1d0c5;
+    cursor: pointer;
+}

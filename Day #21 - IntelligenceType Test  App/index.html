@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Day #21 - IntelligenceType Test  App || YasyaHiaz</title>
+    <!-- Google Fonts (contoh pakai Roboto Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ========== HEADER / TOP BAR ========== -->
+    <header>
+        <div class="top-bar-left">
+            <h1>Intelligence Type</h1>
+        </div>
+        <!-- Menu di kanan -->
+        <div class="top-bar-right">
+            <!-- Pilihan durasi waktu -->
+            <span class="menu-item">time:</span>
+            <select id="timeSelect">
+                <option value="15">15s</option>
+                <option value="30" selected>30s</option>
+                <option value="60">60s</option>
+                <option value="120">120s</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-content">
+        <div class="words-container" id="wordsContainer"></div>
+        <input type="text" id="hiddenInput" autocomplete="off" />
+        <div class="result" id="result"></div>
+        <button id="restartBtn">Restart</button>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <span>discord</span>
+        <span>/</span>
+        <span>twitter</span>
+        <span>/</span>
+        <span>terms</span>
+        <span>/</span>
+        <span>security</span>
+        <span>/</span>
+        <span>privacy</span>
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal -->
+    <script src="script.js"></script>
+</body>
+
+</html>
